@@ -72,8 +72,11 @@ export class LLM {
   public async ask(messages: ChatMessage[]): Promise<string> {
     const response = await this.openai.chat.completions.create({
       model: this.model,
-      messages: this.formatMessages(messages)
-    });
+      messages: this.formatMessages(messages),
+      thinking: {
+        type: 'disabled'
+      }
+    } as any);
     const msg = response.choices[0].message;
     return msg.content ?? "";
   }
@@ -107,8 +110,12 @@ export class LLM {
       model: this.model,
       messages: this.formatMessages(allMessages),
       tools: tools,
-      tool_choice: formattedToolChoice
-    });
+      tool_choice: formattedToolChoice,
+      temperature: 0,
+      thinking: {
+        type: 'disabled'
+      }
+    } as any);
 
     const choice = response.choices[0];
     const msg = choice.message;
