@@ -31,6 +31,7 @@ Follow these steps to set up and run OpenManus on your local machine. Ensure you
    OPENAI_MODEL=your-model-name
    OPENAI_BASE_URL=your-base-url
    OPENAI_API_KEY=your-api-key
+   FINNHUB_API_KEY=your-finnhub-key
    ```
    Make sure to replace the example values with your actual API keys. You can also adjust other configuration options (such as model names or settings) in a config file or environment variables as needed.
 4. **Build the Project**: Compile the TypeScript source code to JavaScript (this step will create a `dist` directory with compiled files).
@@ -64,6 +65,7 @@ OpenManus comes with a variety of powerful features and tools that together enab
 - **System Command & File Management**: With proper safeguards, OpenManus can interact with the operating system to create or read files, run command-line operations, or manage content on disk. This tool allows the agent to handle tasks such as saving its output to a file, reading input files (e.g. reading a text or CSV file for analysis), or executing system commands necessary for a task. (For example, it might use a command to download a resource or use a CLI tool as part of solving a problem.)
 - **Memory and Context**: The agent maintains an internal memory of previous instructions, intermediate results, and important information encountered during a session. This means it can use context from earlier in the conversation or task to inform later steps. The long-term memory helps in complex tasks where multiple steps are interdependent, and ensures the agent doesn't repeat work or contradict itself. You can also configure memory limits or persistence as needed.
 - **Modular and Extensible Design**: OpenManus is built to be developer-friendly. Its codebase is modular, making it straightforward to add new tools or integrations. Developers can extend OpenManus by adding custom tools (for example, connecting an external API like a weather service or database) or by improving the reasoning strategies. Because it's open-source, you have full freedom to modify how the agent works, fine-tune model parameters, or integrate new AI services. Community contributions are encouraged, so the feature set is expected to grow.
+- **StockMaster Agent**: Uses dedicated Finnhub tools (quote, VWAP, EMA, order book, time & sales, pre-market candles) for intraday U.S. stock trading. Set `FINNHUB_API_KEY` and instantiate `StockMaster` for real-time trade ideas.
 - **API and GUI Options**: In addition to the CLI usage, OpenManus is designed with an API-first approach. This means you could run it as a backend service and send it tasks via HTTP requests (useful for integrating into web applications or other systems). A basic web-based user interface might also be available or in development, allowing you to interact with the agent through a browser. These interfaces provide alternative ways to use OpenManus beyond the terminal.
 
 Each of these features works in tandem to emulate the capabilities of Manus AI in an open environment. For example, when given a complex job, OpenManus might use its LLM integration to break down the problem and draft a plan, then invoke the Web Browsing tool to gather data, use the Code Execution tool to analyze that data, and finally produce a comprehensive answer – all autonomously. The combination of internet access, code execution, and memory makes OpenManus a **generalist AI agent**, meaning it can tackle a wide array of tasks across different domains.
@@ -144,6 +146,19 @@ function quickSort(arr) {
 ```
 
 This output includes the JavaScript function as requested. OpenManus not only wrote the code but also tested it to ensure correctness before presenting it. You could follow up with additional questions or ask it to optimize the code further, and it would continue the conversation remembering the context.
+
+**Example 3: Intraday Stock Trading with StockMaster**
+If you set `FINNHUB_API_KEY` in your environment, you can instantiate the `StockMaster` agent for real-time trading analysis:
+
+```ts
+import { StockMaster } from "./app/agent/stock_master";
+
+const agent = new StockMaster();
+const result = await agent.run("关注 AAPL 的盘中走势，给出买卖建议");
+console.log(result);
+```
+
+The agent will call Finnhub tools (quote, VWAP, EMA and others) and return a concise trading plan.
 
 These examples demonstrate how OpenManus can be applied to different domains. Whether you need a virtual research assistant, a travel planner, a coding helper, or something else entirely, you can interact with OpenManus using plain English (or other supported languages for the LLM) and get meaningful, context-aware results. The agent's use of tools is seamless – it decides on the fly how to solve your request and informs you of its process along the way.
 
