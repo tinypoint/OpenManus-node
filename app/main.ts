@@ -1,4 +1,4 @@
-import { Manus } from "./agent/manus";
+import { StockMaster } from "./agent/stock_master";
 import { PlanningFlow } from "./flow/planning";
 import * as readline from "readline";
 import dotenv from "dotenv";
@@ -15,10 +15,10 @@ import logger from "./logger";
 dotenv.config();
 
 // 记录应用启动
-logger.highlight("OpenManus (Node.js) - 应用启动");
+logger.highlight("StockMaster (Node.js) - 应用启动");
 
 // Choose between direct agent or planning flow based on use case
-const agent = new Manus();
+const agent = new StockMaster();
 // (If you want to use planning flow for complex tasks, you could use PlanningFlow instead)
 // const flow = new PlanningFlow();
 
@@ -26,7 +26,7 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-console.log("OpenManus (Node.js) – Enter your prompt (or 'exit' to quit):");
+console.log("StockMaster (Node.js) – Enter your prompt (or 'exit' to quit):");
 rl.prompt();
 rl.on("line", async (input) => {
   const query = input.trim();
@@ -42,7 +42,7 @@ rl.on("line", async (input) => {
   try {
     logger.highlight(`接收到用户请求: "${query}"`);
     console.log("Processing your request...");
-    // Use the Manus agent to handle the query
+    // Use the StockMaster agent to handle the query
     const result = await agent.run(query);
     logger.success("Agent完成请求处理");
     console.log(`Agent: ${result}`);
